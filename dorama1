@@ -1,0 +1,148 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final List<Map<String, dynamic>> perguntas = [
+    {
+      'pergunta': 'Qual dorama é sobre um "fantasma" e um "hotel" misterioso?',
+      'opcoes': ['Hotel Califórnia', 'Hotel Del Luna', 'My Love from the Star'],
+      'respostaCorreta': 'Hotel Del Luna',
+    },
+    {
+      'pergunta': 'Quem é o protagonista de "Boys Over Flowers"?',
+      'opcoes': ['Lee Min Ho', 'Park bo gum', 'Ji Chang Wook'],
+      'respostaCorreta': 'Lee Min Ho',
+    },
+    {
+      'pergunta': 'Em que dorama vemos uma "mulher que cai em um lago e e teleportada para o passado?"?',
+      'opcoes': ['Moon Lovers Scarlet Heart Ryeo', 'O rei eterno', 'Alchemy of souls'],
+      'respostaCorreta': 'Moon Lovers Scarlet Heart Ryeo',
+    },
+    {
+      'pergunta': 'Qual dorama tem a história de um "romance entre um robô e uma mulher"?',
+      'opcoes': ['I’m Not a Robot', 'Strong Woman Do Bong Soon', 'Se a vida te der Tangerinas'],
+      'respostaCorreta': 'I’m Not a Robot',
+    },
+    {
+      'pergunta': 'Qual dorama tem um aluno que se esforça nos estudos e tenta criar um grupo para aprender melhor"?',
+      'opcoes': ['School 2013', 'Study Group', 'Weak hero Class'],
+      'respostaCorreta': 'Study Group',
+    },
+  ];
+
+  int perguntaAtual = 0;
+  int pontos = 0;
+  String? mensagem;
+  bool quizFinalizado = false;
+
+  void verificarResposta(String respostaEscolhida) {
+    String respostaCorreta = perguntas[perguntaAtual]['respostaCorreta'];
+
+    setState(() {
+      if (respostaEscolhida == respostaCorreta) {
+        pontos++;
+        mensagem = 'Resposta certa, razô! +1';
+      } else {
+        mensagem = 'Resposta errada, catapimbas!';
+      }
+    });
+
+    Future.delayed(Duration(seconds: 2), () {
+      setState(() {
+        mensagem = null;
+        if (perguntaAtual < perguntas.length - 1) {
+          perguntaAtual++;
+        } else {
+          quizFinalizado = true;
+        }
+      });
+    });
+  }
+
+  void reiniciarQuiz() {
+    setState(() {
+      perguntaAtual = 0;
+      pontos = 0;
+      quizFinalizado = false;
+      mensagem = null;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      theme: ThemeData.dark(),
+      darkTheme: ThemeData.dark(),
+      home: Scaffold(
+        appBar: AppBar(title: Text('Quiz de Doramas')),
+        body: Center(
+          child: quizFinalizado
+              ? Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Parabéns! Você terminou o quiz!',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 25),
+                    ),
+                    SizedBox(height: 25),
+                    Text(
+                      'Sua pontuação: $pontos/${perguntas.length}',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    SizedBox(height: 25),
+                    ElevatedButton(
+                      onPressed: reiniciarQuiz,
+                      child: Text('Recomeçar'),
+                    ),
+                  ],
+                )
+              : Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Usando imagem local ou da web
+                    Image.network(
+                      'https://avatars.githubusercontent.com/u/65002701?v=4', // Caminho da imagem local
+                      width: 100,
+                      height: 100,
+                    ),
+                    SizedBox(height: 20),
+                    Text(
+                      perguntas[perguntaAtual]['pergunta'],
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    SizedBox(height: 20),
+                    ...perguntas[perguntaAtual]['opcoes']
+                        .map<Widget>((opcao) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4.0),
+                        child: ElevatedButton(
+                          onPressed: mensagem == null
+                              ? () => verificarResposta(opcao)
+                              : null,
+                          child: Text(opcao),
+                        ),
+                      );
+                    }).toList(),
+                    SizedBox(height: 20),
+                    if (mensagem != null)
+                      Text(
+                        mensagem!,
+                        style: TextStyle(fontSize: 18),
+                      ),
+                  ],
+                ),
+        ),
+      ),
+    );
+  }
+}
