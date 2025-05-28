@@ -1,0 +1,126 @@
+
+import 'package:flutter/material.dart';
+
+void main () {
+  runApp(MaterialApp(
+    home : Home ( )
+  ));
+}
+
+class Home extends StatefulWidget {
+  const Home({super.key});
+
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State <Home> {
+  TextEditingController _controllerAlcool = TextEditingController();
+  TextEditingController _controllerGasolina = TextEditingController();
+  TextEditingController _controllerInferior = TextEditingController();
+  
+  String _resultado = '';
+
+  // Método para calcular o melhor preço
+  void calcular() {
+    double? precoAlcool = double.tryParse(_controllerAlcool.text);
+    double? precoGasolina = double.tryParse(_controllerGasolina.text);
+
+    if (precoAlcool == null || precoGasolina == null) {
+      setState(() {
+        _resultado = 'Digite um valor válido!';
+      });
+      return;
+    }
+
+    // Cálculo da melhor opção
+    if (precoAlcool / precoGasolina >= 0.7) {
+      setState(() {
+        _resultado = 'Compensa demais da conta sô, boa viagem mô fih!';
+      });
+    } else {
+      setState(() {
+        _resultado = 'Rapaz, realmente nn compensa, vc consegue na próxima, trabalhador!';
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Compensa ou não compensa? BTS version'),
+        backgroundColor: Colors.blue,
+      ),
+      body: Container(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.all(32),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(bottom: 32),
+                child: Image.network(
+                    'https://avatars.githubusercontent.com/u/186815363?v=4',
+                    height: 350),
+                
+              ),
+              Padding(
+                padding: EdgeInsets.only(bottom: 10),
+                child: Text(
+                  'Descubra qual o melhor setor pro show dos meninos, na sua realidade! ',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+              ),
+              TextField(
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                    labelText: 'Pista Premium:  ',
+                    labelStyle: TextStyle(fontSize: 22)),
+                controller: _controllerAlcool,
+              ),
+              TextField(
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                    labelText: 'Cadeira Superior: ',
+                    labelStyle: TextStyle(fontSize: 22)),
+                controller: _controllerGasolina,
+                
+              ),
+              TextField(
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                    labelText: 'Cadeira Inferior:  ',
+                    labelStyle: TextStyle(fontSize: 22)),
+                controller: _controllerInferior,
+              ),
+              
+              Padding(
+                padding: EdgeInsets.only(bottom: 10, top: 20),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.lightGreenAccent,
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+                  ),
+                  onPressed: calcular,
+                  child: Text(
+                    'Calcular',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 10),
+                child: Text(
+                  _resultado,
+                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
