@@ -59,7 +59,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('BTS Ticket Converter'),
+        title: Text('BTS Ticket Converter', style: TextStyle(color: Colors.white),),
         backgroundColor: Colors.purple[400],
       ),
       body: SingleChildScrollView(
@@ -90,7 +90,7 @@ class _HomeState extends State<Home> {
             SizedBox(height: 30),
             Text(
               '💰 Conversor de Ingressos 💰',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, ),
+              style: TextStyle(fontSize: 22, color: Colors.white, ),
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 16),
@@ -135,7 +135,7 @@ class _HomeState extends State<Home> {
             SizedBox(height: 20),
             Text(
               _resultado,
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500, color: Colors.purple),
               textAlign: TextAlign.center,
             )
           ],
@@ -144,3 +144,5 @@ class _HomeState extends State<Home> {
     );
   }
 }
+
+
