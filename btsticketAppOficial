@@ -1,0 +1,147 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MaterialApp(
+    home: Home(),
+    theme: ThemeData(
+      fontFamily: 'Poppins',
+      scaffoldBackgroundColor: Colors.black, // cor de fundo
+      primarySwatch: Colors.purple,
+      textTheme: TextTheme(
+        bodyLarge: TextStyle(fontSize: 18, color: Colors.white),
+      ),
+    ),
+  ));
+}
+
+class Home extends StatefulWidget {
+  const Home({super.key});
+
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  TextEditingController _controllerPremium = TextEditingController();
+  TextEditingController _controllerSuperior = TextEditingController();
+  TextEditingController _controllerInferior = TextEditingController();
+
+  String _resultado = '';
+  final double _cotacaoDolar = 5.20; // Valor fixo
+
+  void converterValores() {
+    double? precoPremium = double.tryParse(_controllerPremium.text);
+    double? precoSuperior = double.tryParse(_controllerSuperior.text);
+    double? precoInferior = double.tryParse(_controllerInferior.text);
+
+    if (precoPremium == null || precoSuperior == null || precoInferior == null) {
+      setState(() {
+        _resultado = 'Por favorzito, preencha todos os valores corretamente!';
+      });
+      return;
+    }
+
+    double realPremium = precoPremium * _cotacaoDolar;
+    double realSuperior = precoSuperior * _cotacaoDolar;
+    double realInferior = precoInferior * _cotacaoDolar;
+
+    setState(() {
+      _resultado =
+          '💸 Conversão 💸\n\n'
+          '🎟️ Pista Premium: R\$ ${realPremium.toStringAsFixed(2)}\n'
+          '🎟️ Cadeira Superior: R\$ ${realSuperior.toStringAsFixed(2)}\n'
+          '🎟️ Cadeira Inferior: R\$ ${realInferior.toStringAsFixed(2)}';
+    });
+  }
+
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Conversor de ingressos do BTS :) ', style: TextStyle(color: Colors.white),),
+        backgroundColor: Colors.purple[400],
+      ),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            SizedBox(height: 20),
+            Center(
+  child: Container(
+    padding: EdgeInsets.all(4),
+    decoration: BoxDecoration(
+      shape: BoxShape.circle,
+      border: Border.all(color: Colors.purple, width: 4),
+    ),
+    child: ClipOval(
+      child: Image.network(
+        'https://avatars.githubusercontent.com/u/186815363?v=4',
+        height: 200,
+        width: 200,
+        fit: BoxFit.cover,
+      ),
+    ),
+  ),
+),
+
+
+            SizedBox(height: 30),
+            Text(
+              'Converta aqui, seus Ingressos 💰',
+              style: TextStyle(fontSize: 22, color: Colors.white, ),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 16),
+            TextField(
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                labelText: 'Pista Premium (USD)',
+                border: OutlineInputBorder(),
+              ),
+              controller: _controllerPremium,
+            ),
+            SizedBox(height: 12),
+            TextField(
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                labelText: 'Cadeira Superior (USD)',
+                border: OutlineInputBorder(),
+              ),
+              controller: _controllerSuperior,
+            ),
+            SizedBox(height: 12),
+            TextField(
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                labelText: 'Cadeira Inferior (USD)',
+                border: OutlineInputBorder(),
+              ),
+              controller: _controllerInferior,
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.purple[600],
+                padding: EdgeInsets.symmetric(vertical: 16),
+              ),
+              onPressed: converterValores,
+              child: Text(
+                'Converter para Reais 💵',
+                style: TextStyle(fontSize: 18, color: Colors.white),
+              ),
+            ),
+            SizedBox(height: 20),
+            Text(
+              _resultado,
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500, color: Colors.white),
+              textAlign: TextAlign.center,
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
